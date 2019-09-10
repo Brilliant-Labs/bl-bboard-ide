@@ -1,0 +1,51 @@
+{
+  "name": "pxt-bboard_2020",
+  "version": "0.0.2",
+  "description": "BL b.Board for micro:bit target based on Microsoft MakeCode",
+  "keywords": [
+    "JavaScript",
+    "education",
+    "microbit"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Brilliant-Labs/pxt-bboard.git"
+  },
+  "author": "Brilliant Labs",
+  "license": "MIT",
+  "homepage": "https://www.brilliantlabs.ca",
+  "files": [
+    "README.md",
+    "pxtarget.json",
+    "targetconfig.json",
+    "built/*.js",
+    "built/*.json",
+    "built/*.d.ts",
+    "built/hexcache",
+    "built/web",
+    "sim/public",
+    "docs/*.md",
+    "docs/*/*.md",
+    "docs/*/*/*.md",
+    "docs/static/*.svg",
+    "docs/static/*.png",
+    "docs/static/icons/favicon.ico"
+  ],
+  "devDependencies": {
+    "typescript": "2.6.1",
+    "less": "2.7.3",
+    "semantic-ui-less": "2.2.14",
+    "react": "16.3.1",
+    "@types/react": "16.0.25",
+    "@types/react-dom": "16.0.3",
+    "@types/bluebird": "2.0.33",
+    "@types/jquery": "3.2.16",
+    "@types/marked": "0.3.0",
+    "@types/node": "8.0.53",
+    "@types/web-bluetooth": "0.0.4"
+  },
+  "dependencies": {
+    "pxt-common-packages": "6.14.9",
+    "pxt-core": "5.19.8"
+  }
+}
