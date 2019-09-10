@@ -1,4 +1,24 @@
-# micro:bit target for PXT
+# b.Board IDE powered by MakeCode
+
+### using micro:bit target for PXT
+
+Quick and easy way:
+
+1. Open terminal (preferably in VS Code)
+2. git clone https://github.com/Brilliant-Labs/bl-bboard-ide.git
+3. cd bl-bboard-ide
+4. npm install
+5. pxt serve
+6. take a look at http://localhost:3232/index.html# if window doesn't open automatically
+
+
+***Please Note that some icons and favicons may not display properly if running locally***
+
+
+If this doesn't work out for you then please try the instructions below...
+
+
+-------------------------------------------
 
 [![Build Status](https://travis-ci.org/microsoft/pxt-microbit.svg?branch=master)](https://travis-ci.org/microsoft/pxt-microbit)
 
