@@ -1,4 +1,38 @@
-# micro:bit target for PXT
+# b.Board IDE powered by Microsoft's MakeCode
+
+### using micro:bit target for PXT
+
+Quick and easy way:
+
+1. Open terminal (preferably in VS Code)
+2. git clone https://github.com/Brilliant-Labs/bl-bboard-ide.git
+3. cd bl-bboard-ide
+4. npm install
+5. pxt serve
+6. take a look at http://localhost:3232/index.html# if window doesn't open automatically
+
+***Please Note that some icons and favicons may not display properly if running locally***
+
+Would you like to push your own code online?  Then sign up for a free account at https://zeit.co/login and email your account name to  jeff@brilliantlabs.ca  I will add you as a team member for Brilliant Labs.  May make things easier if you select the option to sign in or create account with your GitHub account.
+
+Once this is done follow the instructions to install Zeit.co's "now" on your computer  
+https://zeit.co/download
+
+If you've gotten this far the following part is relatively easy!
+
+From the bl-bboard-ide root folder in VS Code terminal:
+
+1. cd built
+2. cd packaged
+3. now
+
+That's it! Follow the link provided once the project has been deployed online.  If you want to alias it to a simpler url then go to https://zeit.co/dashboard and make sure you select Brilliant Labs and not your own account from the selector in the top left.  From here you can check your deployments and alias your project name.  Please don't alias code to bboard.now.sh or code.brilliantlabs.app without first emailing jeff@brilliantlabs.ca with your project. 
+
+
+
+If you did not have any luck building the bBoard IDE locally then you may be missing some other dependencies and you may have to follow the more complicated instructions below: 
+
+-------------------------------------------
 
 [![Build Status](https://travis-ci.org/microsoft/pxt-microbit.svg?branch=master)](https://travis-ci.org/microsoft/pxt-microbit)
 
