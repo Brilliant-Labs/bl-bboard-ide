@@ -296,6 +296,7 @@
   "bBoard.analogRead|block": "Analog read pin %clickPin on click%clickBoardNum",
   "bBoard.clearPin|block": "Clear pin %clickIOPin on click%clickBoardNum",
   "bBoard.digitalReadPin|block": "Digital read pin %clickIOPin on click%clickBoardNum",
+  "bBoard.getFirmwareVersion|block": "Get firmware version of click%clickBoardNum",
   "bBoard.getUARTData|block": "Get Byte from UART on click%clickBoardNum",
   "bBoard.i2cWriteNumber|block": "i2c write number|at address %address|with value %value|of format %format on click%clickBoardNum|repeated %repeated",
   "bBoard.isUARTDataAvailable|block": "Is UART data available on click%clickBoardNum ?",

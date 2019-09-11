@@ -33,17 +33,17 @@ function WiFiResponse(
       
        
 
-        if(bBoard.isUARTDataAvailable(clickBoardNum)){
+        if(bBoard.isUARTDataAvailable(clickBoardNum))
+        {
            
             receivedStr = receivedStr + bBoard.getUARTData(clickBoardNum); //Read the serial port for any received responses
-          
           
         }
          
                 switch (responseState) {
                     case 0:
                    
-                        if (receivedStr.indexOf(expectedResponse) !== -1)
+                        if (receivedStr.indexOf(expectedResponse) != -1)
                         {
                        
                             responseState = 1; //Move to the next stage of response comparison
@@ -70,7 +70,7 @@ function WiFiResponse(
                     case 3:
                         tempIndex = receivedStr.indexOf("+IPD");
                        
-                        if ( tempIndex !== -1)
+                        if ( tempIndex != -1)
                               {
                               
                                   expectedResponseIndex = tempIndex;
@@ -78,19 +78,21 @@ function WiFiResponse(
                               }
                          
                         break;
+
                     case 4:
                         tempIndex = receivedStr.indexOf(",",expectedResponseIndex);
                        
-                        if (tempIndex !== -1) {
+                        if (tempIndex != -1) {
                           
                             IPDLengthIndexStart = tempIndex + 1;
                             responseState = 5;
                         }
                         break;
+
                     case 5:
                         tempIndex = receivedStr.indexOf(":",expectedResponseIndex);
                 
-                        if (tempIndex !== -1) {
+                        if (tempIndex != -1) {
                            
                             expectedResponseIndex = tempIndex;
                             IPDResponseLength = parseInt(receivedStr.substr(IPDLengthIndexStart,(expectedResponseIndex - IPDLengthIndexStart))); //Convert the characters we received representing the length of the IPD response to an integer
@@ -210,25 +212,30 @@ let UARTRawData  = ""
     //% group="Initialization"
     //% blockGap=7
     export function InitializeWifi(ssid: string, pwd: string,clickBoardNum: clickBoardID): void {
+        bBoard.clearPin(clickIOPin.RST,clickBoardNum)
+        bBoard.setPin(clickIOPin.RST,clickBoardNum)
+        basic.pause(300)
         bBoard.clearUARTRxBuffer(clickBoardNum);
+ 
+
 
         bBoard.sendString("AT+CWMODE=1\r\n", clickBoardNum); //Put the clickinto station (client) mode
         response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum); //Wait for the response "OK"
 
-        clearSerialBuffer(); //Clear any characters from the RX Buffer that came after the previous Response
+       clearSerialBuffer(); //Clear any characters from the RX Buffer that came after the previous Response
         bBoard.sendString("AT+CIPMUX=1\r\n", clickBoardNum);  //Enable multiple connections
-        response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum); //Wait for the response "OK"
+       response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum); //Wait for the response "OK"
 
-        clearSerialBuffer(); //Clear any characters from the RX Buffer that came after the previous Response
+      clearSerialBuffer(); //Clear any characters from the RX Buffer that came after the previous Response
         bBoard.sendString("AT+CWJAP=\"" + ssid + "\",\"" + pwd + "\"\r\n", clickBoardNum);  //Connect to WiFi Network
         response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum); //Wait for the response "OK"
 
-        clearSerialBuffer(); //Clear any characters from the RX Buffer that came after the previous Response
-        bBoard.sendString("AT+CIPSTATUS\r\n", clickBoardNum);  //Get information about the connection status
+       clearSerialBuffer(); //Clear any characters from the RX Buffer that came after the previous Response
+      bBoard.sendString("AT+CIPSTATUS\r\n", clickBoardNum);  //Get information about the connection status
         response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum); //Wait for the response "OK"
 
-        clearSerialBuffer(); //Clear any characters from the RX Buffer that came after the previous Response
-        bBoard.sendString("AT+CIFSR\r\n", clickBoardNum);  //Get local IP Address
+       clearSerialBuffer(); //Clear any characters from the RX Buffer that came after the previous Response
+      bBoard.sendString("AT+CIFSR\r\n", clickBoardNum);  //Get local IP Address
         response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum); //Wait for the response "OK"
     }
 
@@ -609,7 +616,7 @@ let UARTRawData  = ""
 
         response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum); //Wait for the response "OK"
         basic.pause(200)
-
+        bBoard.clearUARTRxBuffer(clickBoardNum);
 
        
         
@@ -639,7 +646,7 @@ let UARTRawData  = ""
        }
       if(bBoard.isUARTDataAvailable(clickBoardNum) || UARTRawData.length > 0)
       {
-          
+    
             UARTRawData = UARTRawData + bBoard.getUARTData(clickBoardNum); // code block
             
 
@@ -664,11 +671,11 @@ let UARTRawData  = ""
                 
                         MQTTMessage  = UARTRawData.substr(startIndex + 4+topicLength,remainingLength-topicLength-2)
     
-                        UARTRawData = UARTRawData.substr(remainingLength-topicLength-2,UARTRawData.length-1) //Remove all data other than the last character (in case there is no more data)
-                        
+                        UARTRawData = UARTRawData.substr(startIndex + remainingLength-topicLength-2,UARTRawData.length-1) //Remove all data other than the last character (in case there is no more data)
+                        return true; //Message retrieved
                     }
               
-                    return true; //Message retrieved
+                    
                 }
             }
      

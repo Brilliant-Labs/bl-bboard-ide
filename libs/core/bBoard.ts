@@ -160,6 +160,7 @@ let BBOARD_COMMAND_READ_TX_BUFFER_DATA = 2
 let BBOARD_COMMAND_READ_TX_BUFFER_SIZE = 3
 let BBOARD_COMMAND_WRITE_RX_BUFFER_DATA = 4
 let BBOARD_COMMAND_EXECUTE_COMMAND = 7
+let BBOARD_COMMAND_SW_VERSION = 9
 
 // 'Clear BBoard tx buffer' command
 let CLEAR_BBOARD_TX_BUFFER = pins.createBuffer(1)
@@ -192,6 +193,11 @@ let I2C_module_id = 4
 let SPI_module_id = 5
 let PWM_module_id = 8
 let ADC_module_id = 9
+let STATUS_module_id = 0x10
+
+// STATUS Ids
+let Knock_Knock_id = 1
+let FIRMWARE_VERSION_id = 2
 
 //UART Function ids
 let UART_STATUS       = 0
@@ -564,6 +570,42 @@ GPIO_SET_OUTPUT_PINS_HIGH.setNumber(NumberFormat.UInt8LE, 7, 0x00)
     }
 
 
+
+           //%blockId=getFirmwareVersion
+    //%block="Get firmware version of click%clickBoardNum"
+    //% blockGap=7
+    //% weight=90   color=#9E4894 icon=""
+    //% advanced=false
+
+    export function getFirmwareVersion(clickBoardNum: clickBoardID): number{
+
+        let analogValue = 0;
+
+
+        let GET_VERSION_COMMAND = pins.createBuffer(4)
+        GET_VERSION_COMMAND.setNumber(NumberFormat.UInt8LE, 0, BBOARD_COMMAND_WRITE_RX_BUFFER_DATA)
+        GET_VERSION_COMMAND.setNumber(NumberFormat.UInt8LE, 1, clickBoardNum)
+        GET_VERSION_COMMAND.setNumber(NumberFormat.UInt8LE, 2, STATUS_module_id)
+        GET_VERSION_COMMAND.setNumber(NumberFormat.UInt8LE, 3, FIRMWARE_VERSION_id)
+
+
+        pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, CLEAR_BBOARD_RX_BUFFER, false)
+        pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, CLEAR_BBOARD_TX_BUFFER, false)
+        pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, GET_VERSION_COMMAND, false)
+        pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, EXECUTE_BBOARD_COMMAND, false)
+     
+        pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, READ_BBOARD_TX_BUFFER, false)
+        let VERSIONBuffer = pins.i2cReadBuffer(BBOARD_I2C_ADDRESS, 2, false)
+        
+        let versionInt = VERSIONBuffer.getUint8(1);
+        let versionDec = VERSIONBuffer.getUint8(0);
+        //basic.showNumber(versionInt)
+        //basic.showNumber(versionDec)
+
+        return (versionInt + versionDec/100);
+
+    }
+
            //%blockId=Analog_Read
     //%block="Analog read pin %clickPin on click%clickBoardNum"
     //% blockGap=7
@@ -797,6 +839,38 @@ GPIO_SET_OUTPUT_PINS_HIGH.setNumber(NumberFormat.UInt8LE, 7, 0x00)
       
     }
 
+       //%blockId=i2c_Read
+   
+    //% blockGap=7
+    //% weight=90   color=#9E4894 icon=""
+    //% advanced=true
+
+    export function I2Cread(address:number, memAddress:number,numBytes: number, clickBoardNum: clickBoardID):number{
+   
+        let READ_BBOARD_TX_BUFFER = pins.createBuffer(1)
+        READ_BBOARD_TX_BUFFER.setNumber(NumberFormat.UInt8LE, 0, BBOARD_COMMAND_READ_TX_BUFFER_DATA)
+
+        let I2C_READ1_COMMAND = pins.createBuffer(7)
+        I2C_READ1_COMMAND.setNumber(NumberFormat.UInt8LE, 0, BBOARD_COMMAND_WRITE_RX_BUFFER_DATA)
+        I2C_READ1_COMMAND.setNumber(NumberFormat.UInt8LE, 1, clickBoardNum)
+        I2C_READ1_COMMAND.setNumber(NumberFormat.UInt8LE, 2, I2C_module_id)
+        I2C_READ1_COMMAND.setNumber(NumberFormat.UInt8LE, 3, I2C_READ_id)
+        I2C_READ1_COMMAND.setNumber(NumberFormat.UInt8LE, 4, address)
+        I2C_READ1_COMMAND.setNumber(NumberFormat.UInt8LE, 5, memAddress)
+        I2C_READ1_COMMAND.setNumber(NumberFormat.UInt8LE, 6, numBytes)
+
+
+            pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, CLEAR_BBOARD_RX_BUFFER, false)
+            pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, CLEAR_BBOARD_TX_BUFFER, false)
+            pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, I2C_READ1_COMMAND, false)
+            pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, EXECUTE_BBOARD_COMMAND, false)
+  
+   
+            pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, READ_BBOARD_TX_BUFFER, false)
+           let  TX_BUFFER_DATAbuf = pins.i2cReadBuffer(BBOARD_I2C_ADDRESS, numBytes, false)
+            return TX_BUFFER_DATAbuf.getUint8(0)
+      
+    }
        /**
     * Set the SPI Chip Select Pin
     */
@@ -891,6 +965,7 @@ GPIO_SET_OUTPUT_PINS_HIGH.setNumber(NumberFormat.UInt8LE, 7, 0x00)
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, CLEAR_BBOARD_RX_BUFFER, false)
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, I2C_WRITE, false)
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, EXECUTE_BBOARD_COMMAND, false)
+        basic.pause(2);
    
     }
   
