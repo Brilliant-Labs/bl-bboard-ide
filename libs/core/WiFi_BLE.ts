@@ -644,35 +644,46 @@ let UARTRawData  = ""
        if(UARTRawData.length > 300){
            UARTRawData = ""
        }
-      if(bBoard.isUARTDataAvailable(clickBoardNum) || UARTRawData.length > 0)
+      if(bBoard.isUARTDataAvailable(clickBoardNum) || UARTRawData.length > 0) //Is new data available OR is there still unprocessed data?
       {
     
-            UARTRawData = UARTRawData + bBoard.getUARTData(clickBoardNum); // code block
-            
-
-            if(UARTRawData.indexOf("+IPD") !== -1) //If +IPD: was found
-            {
+            UARTRawData = UARTRawData + bBoard.getUARTData(clickBoardNum); // Retrieve the new data and append it
    
-                startIndex = UARTRawData.indexOf(":") + 1 //Look for beginning of MQTT message
-                if(startIndex)
-                {
-             
-                    if(UARTRawData.charCodeAt(startIndex) != 0x30) //If message type is not a publish packet
-                    {
-                        return false; //Not a publish packet
-
-                    }
-                    
-                    remainingLength = UARTRawData.charCodeAt(startIndex + 1); //Extract the remaining length from the MQTT message (assuming RL < 127)
-                   
-                    if(UARTRawData.length >= startIndex + remainingLength) //Make sure the rest of the message is here
-                    {
-                        topicLength = UARTRawData.charCodeAt(startIndex + 3); //Extract the topic length from the MQTT message (assuming TL < 127)
+            let IPDIndex = UARTRawData.indexOf("+IPD,0,") //Look for the ESP WiFi response +IPD which indicates data was received
+            if(IPDIndex !== -1) //If +IPD, was found 
+            {
+            
                 
+                startIndex = UARTRawData.indexOf(":") //Look for beginning of MQTT message (which comes after the :)
+               
+                if(startIndex != -1) //If a : was found
+                {
+                    let IPDSizeStr = UARTRawData.substr(IPDIndex+7,startIndex-IPDIndex-7) //The length of the IPD message is between the , and the :
+                   
+                    
+                    let IPDSize = parseInt(IPDSizeStr)
+                    if(UARTRawData.length >= IPDSize + startIndex + 1) //Is the whole message here?
+                    {
+
+                        startIndex += 1; // Add 1 to the start index to get the first character after the ":"
+
+                        if(UARTRawData.charCodeAt(startIndex) != 0x30) //If message type is not a publish packet
+                        {
+
+                            return false; //Not a publish packet
+
+                        }
+                        
+                        remainingLength = UARTRawData.charCodeAt(startIndex + 1); //Extract the remaining length from the MQTT message (assuming RL < 127)
+        
+                        topicLength = UARTRawData.charCodeAt(startIndex + 3); //Extract the topic length from the MQTT message (assuming TL < 127)
+                    
                         MQTTMessage  = UARTRawData.substr(startIndex + 4+topicLength,remainingLength-topicLength-2)
-    
-                        UARTRawData = UARTRawData.substr(startIndex + remainingLength-topicLength-2,UARTRawData.length-1) //Remove all data other than the last character (in case there is no more data)
+                    
+                        UARTRawData = UARTRawData.substr(IPDSize + startIndex,UARTRawData.length-1) //Remove all data other than the last character (in case there is no more data)
+                 
                         return true; //Message retrieved
+                      
                     }
               
                     
