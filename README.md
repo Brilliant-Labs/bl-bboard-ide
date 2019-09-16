@@ -2,6 +2,8 @@
 
 ### using micro:bit target for PXT
 
+If you've never set up a dev environment to work on PXT you will need to install Node!  https://nodejs.org/en/
+
 Quick and easy way:
 
 1. Open terminal (preferably in VS Code)
