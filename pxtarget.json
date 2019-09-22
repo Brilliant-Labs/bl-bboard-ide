@@ -1,7 +1,7 @@
 {
     "id": "bBoard",
     "nickname": "bBoard",
-    "name": "code.brilliantlabs.app",
+    "name": "code.brilliantlabs.ca",
     "title": "Brilliant Labs bBoard for micro:bit with MakeCode",
     "description": "bBoard IDE for the micro:bit powered by Microsoft MakeCode.",
     "corepkg": "core",
@@ -284,7 +284,7 @@
         "shareUrl": "https://makecode.microbit.org/",
         "privacyUrl": "https://makecode.com/privacy",
         "termsOfUseUrl": "https://makecode.com/termsofuse",
-        "githubUrl": "https://github.com/JeffBrilliantLabs/pxt-microbit-bboard.git",
+        "githubUrl": "https://github.com/BrilliantLabs/bl-bboard-ide.git",
         "boardName": "micro:bit",
         "driveDisplayName": "MICROBIT",
         "appStoreID": "1092687276",
