@@ -4,11 +4,10 @@
  */
 
 //% weight=100 color=#33BEBB icon=""
-//% advanced=true
+//% advanced=false
+
 namespace Reed{
 
-
-    
     
     enum reed{
         Activated = 1,
@@ -23,7 +22,7 @@ namespace Reed{
        //%blockId=Reed_isActivated
         //%block="Has reed been activated on click%clickBoardNum ?"
         //% blockGap=7
-        //% advanced=true
+        //% advanced=false
     export function isActivated(clickBoardNum:clickBoardID):boolean
     {
        if(bBoard.digitalReadPin(clickIOPin.CS,clickBoardNum) == reed.Activated)
