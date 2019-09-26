@@ -7,126 +7,131 @@
 
 enum clickBoardID{
   
-        //% block="1"
-        one = 1,
-        //% block="2"
-        two,
-        //% block="3"
-        three,
-        //% block="4"
-        four,
-        //% block="5"
-        five,
-        //% block="6"
-        six,
-        //% block="7"
-        seven,
-        //% block="8"
-        eight,
-            //% block="9"
-            nine, 
-            //% block="10"
-            ten,
-            //% block="11"
-            eleven,
-            //% block="12"
-            twelve,
-            //% block="13"
-            thirteen,
-            //% block="14"
-            fourteen,
-            //% block="15"
-            fifteen,
-            //% block="16"
-            sixteen,
-            //% block="17"
-        seventeen,
-        //% block="18"
-        eighteen,
-            //% block="19"
-            nineteen, 
-            //% block="20"
-            twenty,
-            //% block="21"
-            twentyone,
-            //% block="22"
-            twentytwo,
-            //% block="23"
-            twentythree,
-            //% block="24"
-            twentyfour,
-            //% block="25"
-            twentyfive,
-            //% block="26"
-            twentysix,
-              //% block="27"
-              twentyseven,
-              //% block="28"
-              twentyeight,
-              //% block="29"
-              twentynine,
-              //% block="30"
-              thirty,
-               //% block="31"
-               thirtyone,
-               //% block="32"
-               thirtytwo
-    
+    //% block="1"
+    one = 1,
+    //% block="2"
+    two,
+    //% block="3"
+    three,
+    //% block="4"
+    four,
+    //% block="5"
+    five,
+    //% block="6"
+    six,
+    //% block="7"
+    seven,
+    //% block="8"
+    eight,
+        //% block="9"
+        nine, 
+        //% block="10"
+        ten,
+        //% block="11"
+        eleven,
+        //% block="12"
+        twelve,
+        //% block="13"
+        thirteen,
+        //% block="14"
+        fourteen,
+        //% block="15"
+        fifteen,
+        //% block="16"
+        sixteen,
+        //% block="17"
+    seventeen,
+    //% block="18"
+    eighteen,
+        //% block="19"
+        nineteen, 
+        //% block="20"
+        twenty,
+        //% block="21"
+        twentyone,
+        //% block="22"
+        twentytwo,
+        //% block="23"
+        twentythree,
+        //% block="24"
+        twentyfour,
+        //% block="25"
+        twentyfive,
+        //% block="26"
+        twentysix,
+          //% block="27"
+          twentyseven,
+          //% block="28"
+          twentyeight,
+          //% block="29"
+          twentynine,
+          //% block="30"
+          thirty,
+           //% block="31"
+           thirtyone,
+           //% block="32"
+           thirtytwo
+
 }
 
 
 enum clickIOPin {
-  
-    AN = 0x0001,
-    RST = 0x0002,
-    CS = 0x0004,
-    PWM = 0x8000,
-    INT = 0x4000
-    
+
+AN = 0x0001,
+RST = 0x0002,
+CS = 0x0004,
+SCK = 0x0008,
+MISO = 0x0010,
+MOSI = 0x0020,
+SDA = 0x0400,
+SCL = 0x0800,
+TX = 0x1000,
+RX = 0x2000,
+INT = 0x4000,
+PWM = 0x8000
+
+
 }
 enum IOPullDirection
 {
-      
-        //% block="Pull Up"
-        one = 1,
-        //% block="Pull Down"
-        two = 2,
-        //% block="None"
-        three = 3
+  
+    //% block="Pull Up"
+    one = 1,
+    //% block="Pull Down"
+    two = 2,
+    //% block="None"
+    three = 3
 
 }
 enum clickADCPin {
-    AN = 0x0001,
-    RST = 0x0002,
-    PWM = 0x8000
+AN = 0x0001,
+RST = 0x0002,
+PWM = 0x8000
 
 }
 enum SPIMode {
 
-    Mode0 = 0,
-    Mode1 = 1,
-    Mode2 = 2,
-    Mode3 = 3
+Mode0 = 0,
+Mode1 = 1,
+Mode2 = 2,
+Mode3 = 3
 
 }
 
 
 enum clickPWMPin {
-    AN = 0x0001,
-    RST = 0x0002,
-    PWM = 0x8000,
-    INT = 0x4000
+AN = 0x0001,
+RST = 0x0002,
+PWM = 0x8000,
+INT = 0x4000
 }
 
 enum clickIODirection {
-  
-    input = 3,
-    output = 2
-    
+
+input = 3,
+output = 2
+
 }
-
-
-
 
 /**
  * Custom clickBoard
@@ -143,7 +148,7 @@ namespace bBoard {
  
 let AnalogValue = 0
 let BBOARD_BASE_ADDRESS = 40;
-let BBOARD_UART_TX_BUFF_SIZE = 1024;
+let BBOARD_UART_TX_BUFF_SIZE = 128;
 
 
 
@@ -228,6 +233,8 @@ let PWM_dutyCycle
 // I2C Function Ids
 let I2C_WRITE_id = 1
 let I2C_READ_id = 2
+let I2C_WRITE_NO_MEM_id = 3
+let I2C_READ_NO_MEM_id = 4
 
 // SPI Function Ids
 let SPI_WRITE_id = 1
@@ -311,8 +318,29 @@ let ADC_READ_id = 16
 
     }
 
-
-
+let pitchPin = clickPWMPin.PWM; 
+let pitchClick = clickBoardID.one
+export function analogPitch(frequency:number,ms:number)
+{
+      
+        if (frequency <= 0) {
+          
+          PWMOut(pitchPin,0,pitchClick);
+        } else {
+            PWMOut(pitchPin,70,pitchClick);
+            PWMFrequency(pitchPin,frequency*100,pitchClick);
+        }
+  
+        if (ms > 0) {
+            control.waitMicros(ms*1000)
+            
+            PWMOut(pitchPin,0,pitchClick);
+            // TODO why do we use wait_ms() here? it's a busy wait I think
+            basic.pause(5);
+        }
+      
+  
+} 
     //%blockId=is_UART_Data_Avail
     //%block="Is UART data available on click%clickBoardNum ?"
     //% blockGap=7
@@ -374,7 +402,7 @@ let ADC_READ_id = 16
             pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, UART_CLEARRx_COMMAND, false)
             pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, EXECUTE_BBOARD_COMMAND, false)
     }
-    function getUARTDataSize(clickBoardNum: clickBoardID):number{
+    export function getUARTDataSize(clickBoardNum: clickBoardID):number{
     
     
         let UARTSizeBuf = pins.createBuffer(4)
@@ -395,6 +423,7 @@ let ADC_READ_id = 16
      
         // I then read the message sent back and build it into the RX and TX size
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, CLEAR_BBOARD_RX_BUFFER, false)
+        control.waitMicros(500)
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, READ_BBOARD_TX_BUFFER, false)
         let TX_BUFFER_DATAbuf = pins.i2cReadBuffer(BBOARD_I2C_ADDRESS, 4, false)
         UART_RX_SIZE = TX_BUFFER_DATAbuf.getUint8(0) + TX_BUFFER_DATAbuf.getUint8(1) * 256
@@ -418,7 +447,7 @@ let ADC_READ_id = 16
         let TX_BuffSize = 0
        
        
-        let UARTDataBuf = pins.createBuffer(UART_Rx_BuffSize)
+        let UARTDataBuf = pins.createBuffer(6)
 
         UARTDataBuf.setNumber(NumberFormat.UInt8LE, 0, BBOARD_COMMAND_WRITE_RX_BUFFER_DATA)
         UARTDataBuf.setNumber(NumberFormat.UInt8LE, 1, clickBoardNum)
@@ -441,6 +470,8 @@ let ADC_READ_id = 16
 
         // I retrieve those bytes from the bboard to the microbit
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, CLEAR_BBOARD_RX_BUFFER, false)
+
+        control.waitMicros(500)
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, READ_BBOARD_TX_BUFFER, false)
         let TX_BUFFER_DATAbuf = pins.i2cReadBuffer(BBOARD_I2C_ADDRESS, UART_Rx_BuffSize, false)
 
@@ -476,6 +507,7 @@ let ADC_READ_id = 16
         // I then actually read the data that has been
         // returned by the clickboard
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, CLEAR_BBOARD_RX_BUFFER, false)
+        control.waitMicros(500)
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, READ_BBOARD_TX_BUFFER, false)
 
         TX_BUFFER_DATAbuf = pins.i2cReadBuffer(BBOARD_I2C_ADDRESS, 2, false);
@@ -593,7 +625,7 @@ GPIO_SET_OUTPUT_PINS_HIGH.setNumber(NumberFormat.UInt8LE, 7, 0x00)
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, CLEAR_BBOARD_TX_BUFFER, false)
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, GET_VERSION_COMMAND, false)
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, EXECUTE_BBOARD_COMMAND, false)
-     
+        control.waitMicros(500)
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, READ_BBOARD_TX_BUFFER, false)
         let VERSIONBuffer = pins.i2cReadBuffer(BBOARD_I2C_ADDRESS, 2, false)
         
@@ -630,7 +662,7 @@ GPIO_SET_OUTPUT_PINS_HIGH.setNumber(NumberFormat.UInt8LE, 7, 0x00)
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, CLEAR_BBOARD_TX_BUFFER, false)
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, ADC_READ1_COMMAND, false)
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, EXECUTE_BBOARD_COMMAND, false)
-     
+        control.waitMicros(500)
         pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, READ_BBOARD_TX_BUFFER, false)
         let TX_BUFFER_DATAbuf = pins.i2cReadBuffer(BBOARD_I2C_ADDRESS, 2, false)
         return (TX_BUFFER_DATAbuf.getUint8(0) + TX_BUFFER_DATAbuf.getUint8(1) * 256)
@@ -832,13 +864,44 @@ GPIO_SET_OUTPUT_PINS_HIGH.setNumber(NumberFormat.UInt8LE, 7, 0x00)
             pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, SPI_READ1_COMMAND, false)
             pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, EXECUTE_BBOARD_COMMAND, false)
   
-   
+            control.waitMicros(500)
             pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, READ_BBOARD_TX_BUFFER, false)
            let  TX_BUFFER_DATAbuf = pins.i2cReadBuffer(BBOARD_I2C_ADDRESS, numBytes, false)
             return TX_BUFFER_DATAbuf.getUint8(0)
       
     }
+       //%blockId=i2c_Read
+   
+    //% blockGap=7
+    //% weight=90   color=#9E4894 icon=""
+    //% advanced=true
 
+    export function I2CreadNoMem(address:number, numBytes: number, clickBoardNum: clickBoardID):Buffer{
+   
+        let READ_BBOARD_TX_BUFFER = pins.createBuffer(1)
+        let TX_BUFFER_DATAbuf = pins.createBuffer(numBytes);
+        READ_BBOARD_TX_BUFFER.setNumber(NumberFormat.UInt8LE, 0, BBOARD_COMMAND_READ_TX_BUFFER_DATA)
+
+        let I2C_READ1_COMMAND = pins.createBuffer(6)
+        I2C_READ1_COMMAND.setNumber(NumberFormat.UInt8LE, 0, BBOARD_COMMAND_WRITE_RX_BUFFER_DATA)
+        I2C_READ1_COMMAND.setNumber(NumberFormat.UInt8LE, 1, clickBoardNum)
+        I2C_READ1_COMMAND.setNumber(NumberFormat.UInt8LE, 2, I2C_module_id)
+        I2C_READ1_COMMAND.setNumber(NumberFormat.UInt8LE, 3, I2C_READ_NO_MEM_id)
+        I2C_READ1_COMMAND.setNumber(NumberFormat.UInt8LE, 4, address)
+        I2C_READ1_COMMAND.setNumber(NumberFormat.UInt8LE, 5, numBytes)
+
+
+            pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, CLEAR_BBOARD_RX_BUFFER, false)
+            pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, CLEAR_BBOARD_TX_BUFFER, false)
+            pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, I2C_READ1_COMMAND, false)
+            pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, EXECUTE_BBOARD_COMMAND, false)
+  
+            control.waitMicros(500)
+            pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, READ_BBOARD_TX_BUFFER, false)
+             TX_BUFFER_DATAbuf = pins.i2cReadBuffer(BBOARD_I2C_ADDRESS, numBytes, false)
+            return TX_BUFFER_DATAbuf
+      
+    }
        //%blockId=i2c_Read
    
     //% blockGap=7
@@ -864,7 +927,7 @@ GPIO_SET_OUTPUT_PINS_HIGH.setNumber(NumberFormat.UInt8LE, 7, 0x00)
             pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, CLEAR_BBOARD_TX_BUFFER, false)
             pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, I2C_READ1_COMMAND, false)
             pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, EXECUTE_BBOARD_COMMAND, false)
-  
+            control.waitMicros(500)
    
             pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, READ_BBOARD_TX_BUFFER, false)
            let  TX_BUFFER_DATAbuf = pins.i2cReadBuffer(BBOARD_I2C_ADDRESS, numBytes, false)
@@ -1056,25 +1119,29 @@ GPIO_SET_OUTPUT_PINS_HIGH.setNumber(NumberFormat.UInt8LE, 7, 0x00)
     //% advanced=false
 
     export function sendString( UARTString: string,clickBoardNum: clickBoardID){
-
-        let stringLength = UARTString.length + 4;
-       
-        let UARTBuf = pins.createBuffer(stringLength);
-
-        UARTBuf.setNumber(NumberFormat.UInt8LE, 0, BBOARD_COMMAND_WRITE_RX_BUFFER_DATA)
-        UARTBuf.setNumber(NumberFormat.UInt8LE, 1, clickBoardNum)
-        UARTBuf.setNumber(NumberFormat.UInt8LE, 2, UART_module_id)
-        UARTBuf.setNumber(NumberFormat.UInt8LE, 3, UART_WRITE_TX_DATA)
-
-        for(let i=4; i<stringLength;i++)
+        let remainingBytes = UARTString.length
+        
+        while( remainingBytes )
         {
-                UARTBuf.setNumber(NumberFormat.UInt8LE, i, UARTString.charCodeAt(i-4));
-        }
+            let messageLength = Math.min(remainingBytes+ 4,128);
+            let UARTBuf = pins.createBuffer(messageLength);
 
-        // Send a message to the UART TX Line to ask for data
-        pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, CLEAR_BBOARD_RX_BUFFER, false)
-        pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, UARTBuf, false)
-        pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, EXECUTE_BBOARD_COMMAND, false)
+            UARTBuf.setNumber(NumberFormat.UInt8LE, 0, BBOARD_COMMAND_WRITE_RX_BUFFER_DATA)
+            UARTBuf.setNumber(NumberFormat.UInt8LE, 1, clickBoardNum)
+            UARTBuf.setNumber(NumberFormat.UInt8LE, 2, UART_module_id)
+            UARTBuf.setNumber(NumberFormat.UInt8LE, 3, UART_WRITE_TX_DATA)
+
+            for(let i=4; i<messageLength;i++)
+            {
+                    UARTBuf.setNumber(NumberFormat.UInt8LE, i, UARTString.charCodeAt(UARTString.length - remainingBytes + i - 4));
+            }
+
+            // Send a message to the UART TX Line to ask for data
+            pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, CLEAR_BBOARD_RX_BUFFER, false)
+            pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, UARTBuf, false)
+            pins.i2cWriteBuffer(BBOARD_I2C_ADDRESS, EXECUTE_BBOARD_COMMAND, false)
+            remainingBytes =remainingBytes - messageLength + 4;
+        }
 
     }
 

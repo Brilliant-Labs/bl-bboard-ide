@@ -27,13 +27,13 @@ https://youtu.be/GYmdTFvxz80
 
 ## Activities
 
-* [Making the Guitar Body](/projects/guitar/make)  
-* [Buttons, Display & Sound](/projects/guitar/displaybuttons)  
-* [Light Sensor Tone control](/projects/guitar/lightsensor)  
-* [Accelerometer Beat control](/projects/guitar/accelerometer)  
-* [Pin Press Switch](/projects/guitar/pinpress)  
+* [Making the Guitar Body](/static/projects/guitar/make)  
+* [Buttons, Display & Sound](/static/projects/guitar/displaybuttons)  
+* [Light Sensor Tone control](/static/projects/guitar/lightsensor)  
+* [Accelerometer Beat control](/static/projects/guitar/accelerometer)  
+* [Pin Press Switch](/static/projects/guitar/pinpress)  
 
-## ~button /projects/guitar/make
+## ~button /static/projects/guitar/make
 
 Let's get started!
 

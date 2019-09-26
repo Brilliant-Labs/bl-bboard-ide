@@ -10,7 +10,7 @@ https://youtu.be/7eC_VjH1eP0
 
 ## ~ hint
 
-This is a follow up of the **[soil moisture project](/projects/soil-moisture)**.
+This is a follow up of the **[soil moisture project](/mb/projects/soil-moisture)**.
 
 ## ~
 

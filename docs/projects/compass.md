@@ -6,7 +6,7 @@ Welcome! This guided tutorial will show you how to program a script that display
 
 ## ~
 
-![](/static/mb/projects/a5-compass.png)
+![](/docs/static/mb/projects/a5-compass.png)
 
 Display the direction that the @boardname@ is facing using the compass.
 

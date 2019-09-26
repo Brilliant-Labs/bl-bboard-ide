@@ -8,7 +8,7 @@ Help Karel make LED art!
 
 **Karel the LED** can't turn right, but he can make some great LED art!
 
-![](/static/mb/projects/karel/hi.png "Hi")
+![](/docs/static/mb/projects/karel/hi.png "Hi")
 
 The goal of this activity is to download the JavaScript code given below onto a @boardname@.
 Then use the program to introduce new students to the @boardname@.

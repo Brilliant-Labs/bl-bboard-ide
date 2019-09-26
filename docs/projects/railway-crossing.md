@@ -38,7 +38,7 @@ that is measured when there is no shadow. The number in the light should be at l
 
 ## Step 3: Detecting the train
 
-![Train detection](/static/mb/projects/railway-crossing/railway-crossing-action.png)
+![Train detection](/docs/static/mb/projects/railway-crossing/railway-crossing-action.png)
 
 We are going to turn on the top-left LED on our @boardname@ when a train is passing by.
 For this you need to pick a threshold. This should be a number that is roughly in between the 

@@ -1,15 +1,8 @@
 
-enum MotorDirection {
-    //% block="Forward"
-    Forward,
-    //% block="Reverse"
-    Reverse
-}
 
 
 
-
-//% weight=100 color=#E63022 icon=""
+//% weight=100 color=#EF697B icon=""
 //% advanced=true
 
 namespace DC_Motor3 {
@@ -20,6 +13,13 @@ let IN2 = clickIOPin.RST
 let  SLP = clickIOPin.CS
 let  PWM = clickIOPin.PWM
 
+
+export enum MotorDirection {
+    //% block="Forward"
+    Forward,
+    //% block="Reverse"
+    Reverse
+}
 
 
 
@@ -49,6 +49,8 @@ let  PWM = clickIOPin.PWM
     //% weight=60 color=#0fbc11
     export function motorRotation(direction: MotorDirection, clickBoardNum: clickBoardID): void {
         switch (direction) {
+
+            
             case MotorDirection.Forward:
             bBoard.writePin(1,IN1,clickBoardNum);
             bBoard.writePin(0,IN2,clickBoardNum);

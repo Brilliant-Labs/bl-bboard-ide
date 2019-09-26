@@ -15,7 +15,7 @@ enum lineNumber{
 
 
 //-------------------------Click Board Blocks Begin -----------------------------------
-//% weight=100 color=#D400D4 icon=""
+//% weight=100 color=#0D28F2 icon=""
 //% advanced=true
 namespace LCD_Mini{
 

@@ -1,4 +1,4 @@
-let defaultWiFiTimeoutmS = 10000; //default time alloted for timeout on WiFi communication
+declare const defaultWiFiTimeoutmS = 10000; //default time alloted for timeout on WiFi communication
 let response = 2;
 let receivedData = ""; //A place to store the response from the WiFi clickwhen requestting HTTP data
 let MQTTMessageRetrieveState = 0; //Track MQTT message retrieval state.
@@ -27,11 +27,11 @@ function WiFiResponse(
 
     let responseState = 0; //Used to track where we are in parsing the response
     let startTime = input.runningTime(); //Get the time when this function was called
-
+   
     while (input.runningTime() < (startTime + timeoutmS)) {
         //Do the code below while timeout hasn't occured
       
-       
+
 
         if(bBoard.isUARTDataAvailable(clickBoardNum))
         {
@@ -45,7 +45,7 @@ function WiFiResponse(
                    
                         if (receivedStr.indexOf(expectedResponse) != -1)
                         {
-                       
+                           
                             responseState = 1; //Move to the next stage of response comparison
                            
                         }
@@ -60,7 +60,8 @@ function WiFiResponse(
                                     responseState = 3;
                                 } 
                                 else {
-                                   
+                                    
+                                    receivedData = receivedStr
                                     return 1; //Succesfully matched
                                 }
                            
@@ -96,16 +97,21 @@ function WiFiResponse(
                            
                             expectedResponseIndex = tempIndex;
                             IPDResponseLength = parseInt(receivedStr.substr(IPDLengthIndexStart,(expectedResponseIndex - IPDLengthIndexStart))); //Convert the characters we received representing the length of the IPD response to an integer
+                            
+                            
+                         
                             responseState = 6;
                         }
                           
                         break;
 
                     case 6:
-                        
-                        receivedData = receivedStr.substr(expectedResponseIndex+1,IPDResponseLength);
-               
+                        if(receivedStr.length >= IPDResponseLength){  //Make sure all of the message has arrived
+                            receivedData = receivedStr.slice(expectedResponseIndex+1); //Remove everything except the message
                             return 1; //Successfully read
+
+                        }
+                     
                     
 
                         break;
@@ -195,7 +201,7 @@ function ThingSpeakResponse() {
 /**
  * Custom blocks
  */
-//% weight=100 color=#9E4894 icon=""
+//% weight=100 color=#FF2F92 icon=""
 //% advanced=true
 namespace WiFi_BLE {
 
@@ -276,6 +282,190 @@ let UARTRawData  = ""
         // bBoard.sendString("AT+CIPCLOSE=0\r\n",clickBoardNum)
         //response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum); //Wait for the response "OK"
     }
+    // -------------- 3. Cloud ----------------
+    //% blockId=WiFi_BLE_createVariable
+    //% block="Create variable %varName initialized to %initValue with BLCloud key %key on click%clickBoardNum"
+    //% weight=90
+    //% group="Brilliant Labs Cloud"
+    //% blockGap=7
+    export function BLcreateVariable(
+        varName: string,
+        initValue: number,
+        key: string,
+        clickBoardNum: clickBoardID
+    ): void {
+        let bodyString = "{\n    \"key\": \""+key+ "\",\n   \"cmd\": \"CREATE_VARIABLE\",\n    \"value\": "+initValue.toString()+",\n    \"name\": \""+varName+"\"\n}";
+
+        let getData ="GET /api? HTTP/1.1\r\n" +
+            "Host: cloud.brilliantlabs.ca\r\n" +
+            "Content-Type: application/json\r\n" +
+            "cache-control: no-cache\r\n" +
+            "Content-Length: "+bodyString.length.toString()+"\r\n\r\n" + bodyString;
+            
+     //   bBoard.sendString("AT+CIPMUX=1\r\n", clickBoardNum); 
+      //  response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum);
+        
+        if( isConnected(clickBoardNum) == 0){
+
+            bBoard.sendString("AT+CIPSTART=0,\"SSL\",\"cloud.brilliantlabs.ca\",443\r\n", clickBoardNum); 
+            response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum);
+        }
+     
+
+        bBoard.sendString(
+            "AT+CIPSEND=0," + getData.length.toString() + "\r\n", clickBoardNum);
+        response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum);
+
+        bBoard.sendString(getData, clickBoardNum);
+
+        response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum);
+
+
+
+    }
+
+     function isConnected(clickBoardNum: clickBoardID):number{
+        bBoard.sendString("AT+CIPSTATUS\r\n", clickBoardNum); 
+        response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum);
+        
+        let statusStartIndex = receivedData.indexOf("STATUS:")
+       
+        let connected = parseInt(receivedData.substr(statusStartIndex+7,1)); //Convert the characters we received representing the length of the IPD response to an integer
+      
+        if (connected == 3)
+        {
+          
+           
+            return 1;
+        }
+     
+        
+        return 0;
+     }
+        // -------------- 3. Cloud ----------------
+    //% blockId=WiFi_BLE_updateVariable
+    //% block="Set variable %varName to %setValue with BLCloud key %key on click%clickBoardNum"
+    //% weight=90
+    //% group="Brilliant Labs Cloud"
+    //% blockGap=7
+    export function BLupdateVariable(
+        varName: string,
+        setValue: number,
+        key: string,
+        clickBoardNum: clickBoardID
+    ): void {
+        let bodyString = "{\n    \"key\": \""+key+ "\",\n   \"cmd\": \"SET_VARIABLE\",\n    \"value\": "+setValue.toString()+",\n    \"name\": \""+varName+"\"\n}";
+
+        let getData ="GET /api? HTTP/1.1\r\n" +
+            "Host: cloud.brilliantlabs.ca\r\n" +
+            "Content-Type: application/json\r\n" +
+            "cache-control: no-cache\r\n" +
+            "Content-Length: "+bodyString.length.toString()+"\r\n\r\n" + bodyString;
+            
+            if( isConnected(clickBoardNum) == 0){
+
+                bBoard.sendString("AT+CIPSTART=0,\"SSL\",\"cloud.brilliantlabs.ca\",443\r\n", clickBoardNum); 
+                response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum);
+            }
+ 
+
+        bBoard.sendString("AT+CIPSTART=0,\"SSL\",\"cloud.brilliantlabs.ca\",443\r\n", clickBoardNum); 
+        response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum);
+
+        bBoard.sendString(
+            "AT+CIPSEND=0," + getData.length.toString() + "\r\n", clickBoardNum);
+        response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum);
+
+        bBoard.sendString(getData, clickBoardNum);
+  
+        response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum);
+
+
+    }
+
+            // -------------- 3. Cloud ----------------
+    //% blockId=WiFi_BLE_deleteVariable
+    //% block="Delete variable %varName with BLCloud key %key on click%clickBoardNum"
+    //% weight=90
+    //% group="Brilliant Labs Cloud"
+    //% blockGap=7
+    export function BLdeleteVariable(
+        varName: string,
+        key: string,
+        clickBoardNum: clickBoardID
+    ): void {
+        let bodyString = "{\n    \"key\": \""+key+ "\",\n   \"cmd\": \"DELETE_VARIABLE\",\n    \"name\": \""+varName+"\"\n}";
+
+        let getData ="GET /api? HTTP/1.1\r\n" +
+            "Host: cloud.brilliantlabs.ca\r\n" +
+            "Content-Type: application/json\r\n" +
+            "cache-control: no-cache\r\n" +
+            "Content-Length: "+bodyString.length.toString()+"\r\n\r\n" + bodyString;
+            
+            if( isConnected(clickBoardNum) == 0){
+
+                bBoard.sendString("AT+CIPSTART=0,\"SSL\",\"cloud.brilliantlabs.ca\",443\r\n", clickBoardNum); 
+                response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum);
+            }
+
+        bBoard.sendString("AT+CIPSTART=0,\"SSL\",\"cloud.brilliantlabs.ca\",443\r\n", clickBoardNum); 
+        response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum);
+
+        bBoard.sendString(
+            "AT+CIPSEND=0," + getData.length.toString() + "\r\n", clickBoardNum);
+        response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum);
+
+        bBoard.sendString(getData, clickBoardNum);
+        //bBoard.sendString(getData.substr(0,100), clickBoardNum);
+        //bBoard.sendString(getData.substr(100,getData.length-100), clickBoardNum);
+        response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum);
+
+
+    }
+
+                // -------------- 3. Cloud ----------------
+    //% blockId=WiFi_BLE_getVariable
+    //% block="Get variable %varName with BLCloud key %key on click%clickBoardNum"
+    //% weight=90
+    //% group="Brilliant Labs Cloud"
+    //% blockGap=7
+    export function BLgetVariable(
+        varName: string,
+        key: string,
+        clickBoardNum: clickBoardID
+    ): number {
+        let bodyString = "{\n    \"key\": \""+key+ "\",\n   \"cmd\": \"GET_VARIABLE\",\n    \"name\": \""+varName+"\"\n}";
+
+        let getData ="GET /api? HTTP/1.1\r\n" +
+            "Host: cloud.brilliantlabs.ca\r\n" +
+            "Content-Type: application/json\r\n" +
+            "cache-control: no-cache\r\n" +
+            "Content-Length: "+bodyString.length.toString()+"\r\n\r\n" + bodyString;
+
+            if( isConnected(clickBoardNum) == 0){
+
+                bBoard.sendString("AT+CIPSTART=0,\"SSL\",\"cloud.brilliantlabs.ca\",443\r\n", clickBoardNum); 
+                response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum);
+            }
+
+        bBoard.sendString(
+            "AT+CIPSEND=0," + getData.length.toString() + "\r\n", clickBoardNum);
+        response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum);
+
+        bBoard.sendString(getData, clickBoardNum);
+
+        response = WiFiResponse("OK", true, defaultWiFiTimeoutmS,clickBoardNum);
+
+        let startIndex = receivedData.indexOf("\""+varName+"\":\"")+varName.length+4; 
+
+        let endIndex = receivedData.indexOf("\"}",startIndex)-1;
+      
+        return parseInt(receivedData.substr(startIndex,endIndex-startIndex+1))
+
+
+
+    }
+
 
     // -------------- 3. Cloud ----------------
     //% blockId=BLTest_get_thingspeak
@@ -630,6 +820,28 @@ let UARTRawData  = ""
     export function getMQTTMessage(clickBoardNum: clickBoardID): string {
         return MQTTMessage
     }
+  
+       //% blockId=createVariable
+        //% block="Create Variable -> Api Key:%Key Name %Name on click%clickBoardNum"
+        export function CreateVariable(Key: string, Name: string, clickBoardNum: clickBoardID): void {
+            // Add code here
+            let getData ="\{\r\n\"key\": \"9qvfccbdk0jrgfeh\",\r\n\"cmd\": \"CREATE_VARIABLE\",\r\n\"name\": \"msdsdfsfd\",\r\n\"value\": \"Hello my name is Josiah\"\r\n}\";"
+    
+                bBoard.sendString("AT+CIPMUX=1\r\n", clickBoardNum); 
+                response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum); //Wait for the response "OK"
+        
+                bBoard.sendString("AT+CIPSTART=0,\"TCP\",\"https://cloud.brilliantlabs.ca\",80\r\n", clickBoardNum); 
+                response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum); //Wait for the response "OK"
+        
+                bBoard.sendString(
+                    "AT+CIPSEND=0," + getData.length.toString() + "\r\n", clickBoardNum);
+                    response = WiFiResponse("OK", false, defaultWiFiTimeoutmS,clickBoardNum); //Wait for the response "OK"
+        
+                bBoard.sendString(getData, clickBoardNum);
+                response = WiFiResponse("OK", true, defaultWiFiTimeoutmS,clickBoardNum); //Wait for the response "OK"
+
+        }
+
 
    // -------------- 3. Cloud ----------------
     //% blockId=isMQTTMessage

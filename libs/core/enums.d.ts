@@ -1,6 +1,95 @@
 // Auto-generated. Do not edit.
 
 
+    declare const enum DigitalPin {
+    P0 = 7,  // MICROBIT_ID_IO_P0
+    P1 = 8,  // MICROBIT_ID_IO_P1
+    P2 = 9,  // MICROBIT_ID_IO_P2
+    P3 = 10,  // MICROBIT_ID_IO_P3
+    P4 = 11,  // MICROBIT_ID_IO_P4
+    P5 = 12,  // MICROBIT_ID_IO_P5
+    P6 = 13,  // MICROBIT_ID_IO_P6
+    P7 = 14,  // MICROBIT_ID_IO_P7
+    P8 = 15,  // MICROBIT_ID_IO_P8
+    P9 = 16,  // MICROBIT_ID_IO_P9
+    P10 = 17,  // MICROBIT_ID_IO_P10
+    P11 = 18,  // MICROBIT_ID_IO_P11
+    P12 = 19,  // MICROBIT_ID_IO_P12
+    P13 = 20,  // MICROBIT_ID_IO_P13
+    P14 = 21,  // MICROBIT_ID_IO_P14
+    P15 = 22,  // MICROBIT_ID_IO_P15
+    P16 = 23,  // MICROBIT_ID_IO_P16
+    P19 = 24,  // MICROBIT_ID_IO_P19
+    P20 = 25,  // MICROBIT_ID_IO_P20
+    }
+
+
+    declare const enum AnalogPin {
+    P0 = 7,  // MICROBIT_ID_IO_P0
+    P1 = 8,  // MICROBIT_ID_IO_P1
+    P2 = 9,  // MICROBIT_ID_IO_P2
+    P3 = 10,  // MICROBIT_ID_IO_P3
+    P4 = 11,  // MICROBIT_ID_IO_P4
+    P10 = 17,  // MICROBIT_ID_IO_P10
+    //% block="P5 (write only)"
+    P5 = 12,  // MICROBIT_ID_IO_P5
+    //% block="P6 (write only)"
+    P6 = 13,  // MICROBIT_ID_IO_P6
+    //% block="P7 (write only)"
+    P7 = 14,  // MICROBIT_ID_IO_P7
+    //% block="P8 (write only)"
+    P8 = 15,  // MICROBIT_ID_IO_P8
+    //% block="P9 (write only)"
+    P9 = 16,  // MICROBIT_ID_IO_P9
+    //% block="P11 (write only)"
+    P11 = 18,  // MICROBIT_ID_IO_P11
+    //% block="P12 (write only)"
+    P12 = 19,  // MICROBIT_ID_IO_P12
+    //% block="P13 (write only)"
+    P13 = 20,  // MICROBIT_ID_IO_P13
+    //% block="P14 (write only)"
+    P14 = 21,  // MICROBIT_ID_IO_P14
+    //% block="P15 (write only)"
+    P15 = 22,  // MICROBIT_ID_IO_P15
+    //% block="P16 (write only)"
+    P16 = 23,  // MICROBIT_ID_IO_P16
+    //% block="P19 (write only)"
+    P19 = 24,  // MICROBIT_ID_IO_P19
+    //% block="P20 (write only)"
+    P20 = 25,  // MICROBIT_ID_IO_P20
+    }
+
+
+    declare const enum PulseValue {
+    //% block=high
+    High = 4,  // MICROBIT_PIN_EVT_PULSE_HI
+    //% block=low
+    Low = 5,  // MICROBIT_PIN_EVT_PULSE_LO
+    }
+
+
+    declare const enum PinPullMode {
+    //% block="down"
+    PullDown = 0,
+    //% block="up"
+    PullUp = 1,
+    //% block="none"
+    PullNone = 2,
+    }
+
+
+    declare const enum PinEventType {
+    //% block="edge"
+    Edge = 1,  // MICROBIT_PIN_EVENT_ON_EDGE
+    //% block="pulse"
+    Pulse = 2,  // MICROBIT_PIN_EVENT_ON_PULSE
+    //% block="touch"
+    Touch = 3,  // MICROBIT_PIN_EVENT_ON_TOUCH
+    //% block="none"
+    None = 0,  // MICROBIT_PIN_EVENT_NONE
+    }
+
+
     declare const enum NumberFormat {
     Int8LE = 1,
     UInt8LE = 2,
@@ -425,95 +514,6 @@ declare namespace control {
     }
 declare namespace led {
 }
-
-
-    declare const enum DigitalPin {
-    P0 = 7,  // MICROBIT_ID_IO_P0
-    P1 = 8,  // MICROBIT_ID_IO_P1
-    P2 = 9,  // MICROBIT_ID_IO_P2
-    P3 = 10,  // MICROBIT_ID_IO_P3
-    P4 = 11,  // MICROBIT_ID_IO_P4
-    P5 = 12,  // MICROBIT_ID_IO_P5
-    P6 = 13,  // MICROBIT_ID_IO_P6
-    P7 = 14,  // MICROBIT_ID_IO_P7
-    P8 = 15,  // MICROBIT_ID_IO_P8
-    P9 = 16,  // MICROBIT_ID_IO_P9
-    P10 = 17,  // MICROBIT_ID_IO_P10
-    P11 = 18,  // MICROBIT_ID_IO_P11
-    P12 = 19,  // MICROBIT_ID_IO_P12
-    P13 = 20,  // MICROBIT_ID_IO_P13
-    P14 = 21,  // MICROBIT_ID_IO_P14
-    P15 = 22,  // MICROBIT_ID_IO_P15
-    P16 = 23,  // MICROBIT_ID_IO_P16
-    P19 = 24,  // MICROBIT_ID_IO_P19
-    P20 = 25,  // MICROBIT_ID_IO_P20
-    }
-
-
-    declare const enum AnalogPin {
-    P0 = 7,  // MICROBIT_ID_IO_P0
-    P1 = 8,  // MICROBIT_ID_IO_P1
-    P2 = 9,  // MICROBIT_ID_IO_P2
-    P3 = 10,  // MICROBIT_ID_IO_P3
-    P4 = 11,  // MICROBIT_ID_IO_P4
-    P10 = 17,  // MICROBIT_ID_IO_P10
-    //% block="P5 (write only)"
-    P5 = 12,  // MICROBIT_ID_IO_P5
-    //% block="P6 (write only)"
-    P6 = 13,  // MICROBIT_ID_IO_P6
-    //% block="P7 (write only)"
-    P7 = 14,  // MICROBIT_ID_IO_P7
-    //% block="P8 (write only)"
-    P8 = 15,  // MICROBIT_ID_IO_P8
-    //% block="P9 (write only)"
-    P9 = 16,  // MICROBIT_ID_IO_P9
-    //% block="P11 (write only)"
-    P11 = 18,  // MICROBIT_ID_IO_P11
-    //% block="P12 (write only)"
-    P12 = 19,  // MICROBIT_ID_IO_P12
-    //% block="P13 (write only)"
-    P13 = 20,  // MICROBIT_ID_IO_P13
-    //% block="P14 (write only)"
-    P14 = 21,  // MICROBIT_ID_IO_P14
-    //% block="P15 (write only)"
-    P15 = 22,  // MICROBIT_ID_IO_P15
-    //% block="P16 (write only)"
-    P16 = 23,  // MICROBIT_ID_IO_P16
-    //% block="P19 (write only)"
-    P19 = 24,  // MICROBIT_ID_IO_P19
-    //% block="P20 (write only)"
-    P20 = 25,  // MICROBIT_ID_IO_P20
-    }
-
-
-    declare const enum PulseValue {
-    //% block=high
-    High = 4,  // MICROBIT_PIN_EVT_PULSE_HI
-    //% block=low
-    Low = 5,  // MICROBIT_PIN_EVT_PULSE_LO
-    }
-
-
-    declare const enum PinPullMode {
-    //% block="down"
-    PullDown = 0,
-    //% block="up"
-    PullUp = 1,
-    //% block="none"
-    PullNone = 2,
-    }
-
-
-    declare const enum PinEventType {
-    //% block="edge"
-    Edge = 1,  // MICROBIT_PIN_EVENT_ON_EDGE
-    //% block="pulse"
-    Pulse = 2,  // MICROBIT_PIN_EVENT_ON_PULSE
-    //% block="touch"
-    Touch = 3,  // MICROBIT_PIN_EVENT_ON_TOUCH
-    //% block="none"
-    None = 0,  // MICROBIT_PIN_EVENT_NONE
-    }
 
 
     declare const enum SerialPin {

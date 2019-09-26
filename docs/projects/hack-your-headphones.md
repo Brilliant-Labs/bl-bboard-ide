@@ -27,8 +27,8 @@ Build your own @boardname@ music player using headphones.
 
 ## Activities
 
-* [Make](/projects/hack-your-headphones/make)
-* [Code](/projects/hack-your-headphones/code)
+* [Make](/static/projects/hack-your-headphones/make)
+* [Code](/static/projects/hack-your-headphones/code)
 
 ## ~button /projects/hack-your-headphones/make
 
