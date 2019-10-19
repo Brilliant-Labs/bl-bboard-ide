@@ -26,7 +26,6 @@ function initialize(clickBoardNum:clickBoardID)
 
 }
 
-  
 
           //%blockId=Noise_getNoiseLevel
         //%block="Get raw noise level on click%clickBoardNum"
@@ -62,7 +61,7 @@ export function isThresholdTriggered(clickBoardNum:clickBoardID):boolean
     }
  }
        //%blockId=Noise_setThreshold
-        //%block="Set noise threshold to %threshold on click%clickBoardNum ?"
+        //%block="Set noise threshold to %threshold on click%clickBoardNum"
         //% blockGap=7
         //% advanced=false
         //% threshold.min=0 threshold.max=100
@@ -88,7 +87,7 @@ export function isThresholdTriggered(clickBoardNum:clickBoardID):boolean
 
         }
        //%blockId=Noise_write
-        //%block="Write %value on click%clickBoardNum ?"
+        //%block="Write %value on click%clickBoardNum"
         //% blockGap=7
         //% advanced=true
     export function write(value:number,clickBoardNum:clickBoardID)

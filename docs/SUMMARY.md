@@ -7,6 +7,7 @@
 ## #projects
 
 * [Projects](/projects)
+    * [Button G](/projects/button-g)
     * [Flashing Heart](/projects/flashing-heart)
     * [Smiley Buttons](/projects/smiley-buttons)
     * [Love Meter](/projects/love-meter)

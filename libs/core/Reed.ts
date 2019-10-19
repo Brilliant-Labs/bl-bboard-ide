@@ -2,12 +2,12 @@
 /**
  * Custom blocks
  */
-
 //% weight=100 color=#33BEBB icon=""
-//% advanced=false
-
+//% advanced=true
 namespace Reed{
 
+
+    
     
     enum reed{
         Activated = 1,

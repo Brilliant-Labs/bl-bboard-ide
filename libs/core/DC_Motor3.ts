@@ -20,19 +20,27 @@ export enum MotorDirection {
     //% block="Reverse"
     Reverse
 }
+let isInitialized  = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 
 
+function initialize(clickBoardNum:clickBoardID)
+{
+    motorRotation(MotorDirection.Forward,clickBoardNum)
+    isInitialized[clickBoardNum]  = 1
+
+}
 
     //------------------------Motor Click---------------------------------
 
 
-    //% blockId=Motor_speed
-    //% block="Motor speed %Speed on click%clickBoardNum"
-    //% Speed.min=0 Speed.max=100
-    //% group="Operation"
-    //% weight=60 color=#0fbc11
+
     export function motorSpeed(Speed: number,clickBoardNum: clickBoardID): void {
-        
+        if(isInitialized[clickBoardNum] == 0)
+        {
+            initialize(clickBoardNum)
+            
+        }
+
         if (Speed > 100) {
             Speed = 100;
         }
@@ -43,10 +51,27 @@ export enum MotorDirection {
        
     }
 
-    //% blockId=Motor_direction
-    //% block="Motor rotation %direction on click%clickBoardNum"
-    //% group="Operation"
-    //% weight=60 color=#0fbc11
+    //% blockId=Motor_speedDirection
+    //% block="Set speed to %speed with direction%direction on click%clickBoardNum"
+    //% Speed.min=0 Speed.max=100
+    //% advanced=false
+    //% speed.min=0 speed.max=100
+
+    export function motorSpeedDirection(speed: number,direction: MotorDirection,clickBoardNum: clickBoardID): void {
+        if(isInitialized[clickBoardNum] == 0)
+        {
+            initialize(clickBoardNum)
+            
+        }
+
+        motorRotation(direction,clickBoardNum);
+        motorSpeed(speed,clickBoardNum)
+      
+       
+    }
+
+
+
     export function motorRotation(direction: MotorDirection, clickBoardNum: clickBoardID): void {
         switch (direction) {
 

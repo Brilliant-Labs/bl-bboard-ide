@@ -27,8 +27,8 @@ namespace IR_Sense_3{
    
 
        
-     //%blockId=PCA9685_write
-        //%block="Write array %values to PCA9685 register%register on click%clickBoardNum ?"
+     //%blockId=AK9754_write
+        //%block="Write array %values to AK9754 register%register on click%clickBoardNum ?"
         //% blockGap=7
         //% advanced=true
         function writeAK9754(values:number[],clickBoardNum:clickBoardID)
@@ -63,7 +63,7 @@ namespace IR_Sense_3{
                 }
                 if(bBoard.digitalReadPin(clickIOPin.INT,clickBoardNum)==0) //If the interrupt pin has gone low (indicating human detected)
                 {
-                    readAK9754(IRL,clickBoardNum);
+                    readAK9754(IRL,clickBoardNum); //Datasheet indicates that reading from IRL will clear the interrupt. *Need to confirm if other reads are necessary
                     readAK9754(IRH,clickBoardNum);
                     readAK9754(ST1,clickBoardNum);
                     readAK9754(ST2,clickBoardNum);

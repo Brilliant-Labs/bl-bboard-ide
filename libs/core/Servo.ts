@@ -4,7 +4,7 @@
  */
 //% weight=100 color=#EF697B icon=""
 //% advanced=true
-namespace Servo_Click{
+namespace Servo{
 
  
       
@@ -93,7 +93,7 @@ let servoAngleMax = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 
 // you can use this function if you'd like to set the pulse length in seconds
 // e.g. setServoPulse(0, 0.001) is a ~1 millisecond pulse width. its not precise!
-function setServoPulse( n:number,  pulse:number,clickBoardNum:clickBoardID) {
+function setServoPulse( servoNumber:number, pulse:number,clickBoardNum:clickBoardID) {
     
     
     let pulselength = 1000000;   // 1,000,000 us per second
@@ -104,7 +104,7 @@ function setServoPulse( n:number,  pulse:number,clickBoardNum:clickBoardID) {
     pulse = pulse/pulselength ;  // convert to us
     
     bBoard.sendString("Pulse2="+pulse.toString(),2)
-    setPWM(n, 0, pulse,clickBoardNum);
+    setPWM(servoNumber, 0, pulse,clickBoardNum);
   }
 
 
@@ -112,13 +112,19 @@ function setServoPulse( n:number,  pulse:number,clickBoardNum:clickBoardID) {
     //%block="Set servo %n to %angle on click%clickBoardNum"
     //% blockGap=7
     //% advanced=false
-export function setServoAngle( n:number,  angle:number,clickBoardNum:clickBoardID) {
+    //% servoNumber.min=1 servoNumber.max=16
+    //% servoNumber.defl=1
+export function setServoAngle( servoNumber:number, angle:number,clickBoardNum:clickBoardID) {
     
     if(isInitialized[clickBoardNum] == 0)
     {
         initialize(PCA9685_DEFAULT_I2C_ADDRESS,LTC2497_DEFAULT_I2C_ADDRESS,clickBoardNum)
         
     }
+
+    servoNumber = Math.min(servoNumber,1);
+    servoNumber = Math.max(servoNumber,16);
+
     let angleMin = 0
     let angleMax = 180
     let pulseMin = 1000
@@ -128,14 +134,16 @@ export function setServoAngle( n:number,  angle:number,clickBoardNum:clickBoardI
     let pulseRange = (pulseMax - pulseMin)  
     let pulseWidth = (((angle - angleMin) * pulseRange) / angleRange) + pulseMin
 
-    setServoPulse(n,pulseWidth,clickBoardNum)
+    setServoPulse(servoNumber-1,pulseWidth,clickBoardNum)
   }
 
      //%blockId=Servo_AngleAdjusted
     //%block="Set servo %n to %angle with pulse range min %pulseMin and max %pulseMax on click%clickBoardNum"
     //% blockGap=7
     //% advanced=true
-export function setServoAngleAdjusted( n:number,  angle:number,pulseMin:number,pulseMax:number,clickBoardNum:clickBoardID) {
+        //% servoNumber.min=1 servoNumber.max=16
+    //% servoNumber.defl=1
+export function setServoAngleAdjusted( servoNumber:number,  angle:number,pulseMin:number,pulseMax:number,clickBoardNum:clickBoardID) {
     
     if(isInitialized[clickBoardNum] == 0)
     {
@@ -148,9 +156,10 @@ export function setServoAngleAdjusted( n:number,  angle:number,pulseMin:number,p
     let angleRange = (angleMax - angleMin)  
     let pulseRange = (pulseMax - pulseMin)  
     let pulseWidth = (((angle - angleMin) * pulseRange) / angleRange) + pulseMin
-
+    servoNumber = Math.min(servoNumber,1);
+    servoNumber = Math.max(servoNumber,16);
    
-    setServoPulse(n,pulseWidth,clickBoardNum)
+    setServoPulse(servoNumber-1,pulseWidth,clickBoardNum)
   }
 
   function getServoAngleMin(clickBoardNum:clickBoardID):number
@@ -283,25 +292,38 @@ let  newmode = 0;
  // return _i2c->read();
 //}
 
+
+     //%blockId=Servo_setPWM
+    //%block="Set servo %num to be on %on and off %off on click%clickBoardNum"
+    //% blockGap=7
+    //% advanced=true
+    //% servoNumber.min=1 servoNumber.max=16
+    //% servoNumber.defl=1
+    export function userSetPWM(servoNumber:number, on:number, off:number,clickBoardNum:clickBoardID)  
+    {
+      servoNumber = Math.min(servoNumber,1);
+      servoNumber = Math.max(servoNumber,16);
+        setPWM(servoNumber-1,on,off,clickBoardNum)
+    }
 /*!
  *  @brief  Sets the PWM output of one of the PCA9685 pins
  *  @param  num One of the PWM output pins, from 0 to 15
  *  @param  on At what point in the 4096-part cycle to turn the PWM output ON
  *  @param  off At what point in the 4096-part cycle to turn the PWM output OFF
  */
-     //%blockId=Servo_setPWM
-        //%block="Set servo %num to be on %on and off %off on click%clickBoardNum"
-        //% blockGap=7
-        //% advanced=true
-export function setPWM(num:number, on:number, off:number,clickBoardNum:clickBoardID)  {
+  
+function setPWM(servoNumber:number, on:number, off:number,clickBoardNum:clickBoardID)  {
 
     if(isInitialized[clickBoardNum] == 0)
     {
         initialize(PCA9685_DEFAULT_I2C_ADDRESS,LTC2497_DEFAULT_I2C_ADDRESS,clickBoardNum);
     }
-   
+    servoNumber = Math.min(servoNumber,1);
+    servoNumber = Math.max(servoNumber,16);
+
+
     let i2cArray:number [] = []
-    i2cArray[0] = LED0_ON_L + 4 * num;
+    i2cArray[0] = LED0_ON_L + 4 * servoNumber;
     i2cArray[1] = on & 0x00FF;
     i2cArray[2] = on >> 8;
     i2cArray[3] = off & 0x00FF;
@@ -319,28 +341,32 @@ export function setPWM(num:number, on:number, off:number,clickBoardNum:clickBoar
  * from 0 to 4095 inclusive.
  *   @param  invert If true, inverts the output, defaults to 'false'
  */
-function setPin(num:number, val:number, invert:boolean,clickBoardNum:clickBoardID) {
+function setPin(servoNumber:number, val:number, invert:boolean,clickBoardNum:clickBoardID) {
+
+    servoNumber = Math.min(servoNumber,1);
+    servoNumber = Math.max(servoNumber,16);
+  
   // Clamp value between 0 and 4095 inclusive.
   val = Math.min(val, 4095);
   if (invert) {
     if (val == 0) {
       // Special value for signal fully on.
-      setPWM(num, 4096, 0,clickBoardNum);
+      setPWM(servoNumber-1, 4096, 0,clickBoardNum);
     } else if (val == 4095) {
       // Special value for signal fully off.
-      setPWM(num, 0, 4096,clickBoardNum);
+      setPWM(servoNumber-1, 0, 4096,clickBoardNum);
     } else {
-      setPWM(num, 0, 4095 - val,clickBoardNum);
+      setPWM(servoNumber-1, 0, 4095 - val,clickBoardNum);
     }
   } else {
     if (val == 4095) {
       // Special value for signal fully on.
-      setPWM(num, 4096, 0,clickBoardNum);
+      setPWM(servoNumber-1, 4096, 0,clickBoardNum);
     } else if (val == 0) {
       // Special value for signal fully off.
-      setPWM(num, 0, 4096,clickBoardNum);
+      setPWM(servoNumber-1, 0, 4096,clickBoardNum);
     } else {
-      setPWM(num, 0, val,clickBoardNum);
+      setPWM(servoNumber-1, 0, val,clickBoardNum);
     }
   }
 }
@@ -375,7 +401,7 @@ function setPin(num:number, val:number, invert:boolean,clickBoardNum:clickBoardI
 
         
          //%blockId=PCA9685_read
-            //%block="Read from register%register on click%clickBoardNum ?"
+            //%block="Read from register%register on click%clickBoardNum"
             //% blockGap=7
             //% advanced=true
       export   function readPCA9685( register:number, clickBoardNum:clickBoardID):number

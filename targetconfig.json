@@ -178,6 +178,7 @@
     ],
     "galleries": {
         "Tutorials": "tutorials",
+         "b.Board Tutorials": "projects/bboard",
         "Games": "projects/games",
         "Radio Games": "projects/radio-games",
         "Fashion": "projects/fashion",

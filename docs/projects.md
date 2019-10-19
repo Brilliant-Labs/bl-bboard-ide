@@ -9,6 +9,12 @@
         "largeImageUrl": "/static/mb/projects/flashing-heart/sim.gif"
     },
     {
+        "name": "b.Board Tutorials",
+        "url": "/projects/bboard",
+        "imageUrl": "docs/static/mb/projects/button-g/button_g.jpg",
+        "largeImageUrl": "docs/static/mb/projects/button-g/cover.gif"
+    },
+    {
         "name": "Games",
         "url": "/projects/games",
         "imageUrl": "/static/mb/projects/a4-motion.png"
@@ -69,6 +75,7 @@
 ## See Also
 
 [Tutorials](/tutorials),
+[b.Board Tutorials](/projects/bboard),
 [Games](/projects/games),
 [Radio Games](/projects/radio-games),
 [Fashion](/projects/fashion),

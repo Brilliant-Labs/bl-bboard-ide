@@ -75,7 +75,7 @@ declare const  TOS_REG     = 0x03
 
 
  //%blockId=MAX31875_write
-    //%block="Write %value to register%register on click%clickBoardNum ?"
+    //%block="Write %value to register%register on click%clickBoardNum"
     //% blockGap=7
     //% advanced=true
     function writeMAX31875(value:number,register:number,clickBoardNum:clickBoardID)
@@ -94,7 +94,7 @@ declare const  TOS_REG     = 0x03
     }
     
      //%blockId=MAX31875_read
-        //%block="Read from register%register on click%clickBoardNum ?"
+        //%block="Read from register%register on click%clickBoardNum"
         //% blockGap=7
         //% advanced=true
     function readMAX31875( register:number, clickBoardNum:clickBoardID):number

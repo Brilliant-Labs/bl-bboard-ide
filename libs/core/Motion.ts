@@ -7,6 +7,8 @@
 namespace Motion{
 
 
+    
+    
     enum motion{
         detected = 1,
         none = 0,

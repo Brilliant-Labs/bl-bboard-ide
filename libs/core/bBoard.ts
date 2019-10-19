@@ -136,7 +136,7 @@ output = 2
 /**
  * Custom clickBoard
  */
-// //% weight=100 color=#9E4894 icon=""
+//% weight=100 color=#9E4894 icon=""
 //% advanced=true
 
 

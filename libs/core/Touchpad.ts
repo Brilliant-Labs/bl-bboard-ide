@@ -149,7 +149,7 @@ export function getY(clickBoardNum:clickBoardID):number
     }
 
    //%blockId=Touchpad_getGestureName
-    //%block="Convert gesture ID %gestureID to a friendly name on click%clickBoardNum ?"
+    //%block="Convert gesture ID %gestureID to a friendly name on click%clickBoardNum"
     //% blockGap=7
     //% advanced=false    
     export function getGestureName(gestureID:number,clickBoardNum:clickBoardID):string
@@ -206,7 +206,7 @@ return "None"
     }
 
    //%blockId=Touchpad_getTouchState
-    //%block="Get touch status on click%clickBoardNum ?"
+    //%block="Get touch status on click%clickBoardNum"
     //% blockGap=7
     //% advanced=true
 export function getTouchState(clickBoardNum:clickBoardID):number
@@ -217,7 +217,7 @@ export function getTouchState(clickBoardNum:clickBoardID):number
 }
 
    //%blockId=Touchpad_getGesture
-    //%block="Get gesture on click%clickBoardNum ?"
+    //%block="Get gesture on click%clickBoardNum"
     //% blockGap=7
     //% advanced=false
     export function getGesture(clickBoardNum:clickBoardID):number
@@ -233,7 +233,7 @@ export function getTouchState(clickBoardNum:clickBoardID):number
     }
 
    //%blockId=Touchpad_write
-    //%block="Write %value to register%register on click%clickBoardNum ?"
+    //%block="Write %value to register%register on click%clickBoardNum"
     //% blockGap=7
     //% advanced=true
 function writeMTCH6102(value:number,register:number,clickBoardNum:clickBoardID)
@@ -251,7 +251,7 @@ function writeMTCH6102(value:number,register:number,clickBoardNum:clickBoardID)
 }
 
  //%blockId=Touchpad_read
-    //%block="Read from register%register on click%clickBoardNum ?"
+    //%block="Read from register%register on click%clickBoardNum"
     //% blockGap=7
     //% advanced=true
 function readMTCH6102( register:number, clickBoardNum:clickBoardID):number
